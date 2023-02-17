@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import './App.css'
 import ShinCodeContext from './main';
 
@@ -7,11 +7,14 @@ import ShinCodeContext from './main';
  * useEffect  発火のタイミングを決めることができる
  *            useEffect内で依存関係のあるものを使わない（無限ループ対策）
  * useContext コンポーネント間のデータの受け渡し
+ * useRef     input等の参照したい値を取得することができる
+ * 
  * 
  */
 function App() {
   const [count, setCount] = useState(0);
   const shincodeInfo = useContext(ShinCodeContext);
+  const ref = useRef();
 
   const handleClick = () => {
     setCount(count + 1);
@@ -20,6 +23,11 @@ function App() {
   useEffect(() => {
     console.log("Hello, Hooks");
   }, [count]);
+
+  const handleRef = () => {
+    console.log(ref.current.value);
+    console.log(ref.current.offsetHeight);
+  };
 
   return (
     <div className="App">
@@ -31,6 +39,12 @@ function App() {
       <h1>useContext</h1>
       <p>{shincodeInfo.name}</p>
       <p>{shincodeInfo.age}</p>
+
+      <hr />
+      <h1>useRef</h1>
+      <input type="text" ref={ref}/>
+      <button onClick={handleRef}>UseRef</button>
+      
     </div>
   );
 }
