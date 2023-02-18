@@ -1,17 +1,18 @@
-import { useEffect, useState, useContext, useRef, useReducer, useMemo } from 'react';
+import { useEffect, useState, useContext, useRef, useReducer, useMemo, useCallback } from 'react';
 import './App.css'
 import ShinCodeContext from './main';
+import SomeChild from './SomeChild';
 
 /**
- * useState   データが変更されたタイミングでレンダリングする
- * useEffect  発火のタイミングを決めることができる
- *            useEffect内で依存関係のあるものを使わない（無限ループ対策）
- * useContext コンポーネント間のデータの受け渡し
- * useRef     input等の参照したい値を取得することができる
- * useReducer Reduxのような概念（難しいため今はこんなものなんだ程度で覚える）
- * useMemo    メモ化することができる（メモリに値を保存することができる）
- *            第二引数に変化を見るものを指定できる
- * 
+ * useState     データが変更されたタイミングでレンダリングする
+ * useEffect    発火のタイミングを決めることができる
+ *              useEffect内で依存関係のあるものを使わない（無限ループ対策）
+ * useContext   コンポーネント間のデータの受け渡し
+ * useRef       input等の参照したい値を取得することができる
+ * useReducer   Reduxのような概念（難しいため今はこんなものなんだ程度で覚える）
+ * useMemo      メモ化することができる（メモリに値を保存することができる）
+ *              第二引数に変化を見るものを指定できる
+ * useCallback  関数のメモ化
  */
 
 const reducer = (state, action) => {
@@ -47,6 +48,7 @@ function App() {
   const [count01, setCount01] = useState(0);
   const [count02, setCount02] = useState(0);
 
+  // useMemo
   // const square = () => {
   //   let i = 0;
   //   while (i < 2000000000) {
@@ -65,6 +67,16 @@ function App() {
     console.log("クリックされました");
     return count02 * count02;
   }, [count02]);
+
+  // useCallback
+  const [counter, setCounter] = useState(0);
+
+  // const showCount = () => {
+  //   alert('これは重い処理です');
+  // };
+  const showCount = useCallback(() => {
+    alert('これは重い処理です');
+  },[counter]);
 
   return (
     <div className="App">
@@ -95,6 +107,10 @@ function App() {
       <div>結果：{square}</div>
       <button onClick={() => setCount01(count01 + 1)}>＋</button>
       <button onClick={() => setCount02(count02 + 1)}>＋</button>
+
+      <hr />
+      <h1>useCallback</h1>
+      <SomeChild showCount={showCount} />
     </div>
   );
 }
