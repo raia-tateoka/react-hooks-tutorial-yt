@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useRef, useReducer } from 'react';
+import { useEffect, useState, useContext, useRef, useReducer, useMemo } from 'react';
 import './App.css'
 import ShinCodeContext from './main';
 
@@ -9,6 +9,8 @@ import ShinCodeContext from './main';
  * useContext コンポーネント間のデータの受け渡し
  * useRef     input等の参照したい値を取得することができる
  * useReducer Reduxのような概念（難しいため今はこんなものなんだ程度で覚える）
+ * useMemo    メモ化することができる（メモリに値を保存することができる）
+ *            第二引数に変化を見るものを指定できる
  * 
  */
 
@@ -42,6 +44,28 @@ function App() {
     console.log(ref.current.offsetHeight);
   };
 
+  const [count01, setCount01] = useState(0);
+  const [count02, setCount02] = useState(0);
+
+  // const square = () => {
+  //   let i = 0;
+  //   while (i < 2000000000) {
+  //     i++;
+  //   }
+  //   console.log("クリックされました");
+  //   return count02 * count02;
+  // };
+
+  const square = useMemo(() => {
+    let i = 0;
+    // 重い処理
+    while (i < 2000000000) {
+      i++;
+    };
+    console.log("クリックされました");
+    return count02 * count02;
+  }, [count02]);
+
   return (
     <div className="App">
       <h1>UseState, UseEffect</h1>
@@ -63,6 +87,14 @@ function App() {
       <p>カウント：{state}</p>
       <button onClick={() => dispatch({ type: "increment" })}>＋</button>
       <button onClick={() => dispatch({ type: "decrement" })}>－</button>
+
+      <hr />
+      <h1>useMemo</h1>
+      <div>カウント1：{count01}</div>
+      <div>カウント2：{count02}</div>
+      <div>結果：{square}</div>
+      <button onClick={() => setCount01(count01 + 1)}>＋</button>
+      <button onClick={() => setCount02(count02 + 1)}>＋</button>
     </div>
   );
 }
