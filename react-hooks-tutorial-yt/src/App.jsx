@@ -2,6 +2,7 @@ import { useEffect, useState, useContext, useRef, useReducer, useMemo, useCallba
 import './App.css'
 import ShinCodeContext from './main';
 import SomeChild from './SomeChild';
+import useLocalStorage from './useLocalStorage';
 
 /**
  * useState     データが変更されたタイミングでレンダリングする
@@ -13,6 +14,7 @@ import SomeChild from './SomeChild';
  * useMemo      メモ化することができる（メモリに値を保存することができる）
  *              第二引数に変化を見るものを指定できる
  * useCallback  関数のメモ化
+ * custumHooks  自分の使いたいようにカスタムしたHooks
  */
 
 const reducer = (state, action) => {
@@ -78,6 +80,9 @@ function App() {
     alert('これは重い処理です');
   },[counter]);
 
+  // カスタムフック
+  const [age, setAge] = useLocalStorage("age", 24);
+
   return (
     <div className="App">
       <h1>UseState, UseEffect</h1>
@@ -111,6 +116,11 @@ function App() {
       <hr />
       <h1>useCallback</h1>
       <SomeChild showCount={showCount} />
+
+      <hr />
+      <h1>カスタムフック</h1>
+      <p>{age}</p>
+      <button onClick={() => setAge(80)}>年齢をセット</button>
     </div>
   );
 }
